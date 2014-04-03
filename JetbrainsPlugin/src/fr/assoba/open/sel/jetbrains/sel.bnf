@@ -1,0 +1,50 @@
+{
+  parserClass="fr.assoba.open.sel.jetbrains.SimpleParser"
+  parserUtilClass="fr.assoba.open.sel.jetbrains.SelParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="SEL"
+  psiImplClassSuffix="Impl"
+  psiPackage="fr.assoba.open.sel.jetbrains.psi"
+  psiImplPackage="fr.assoba.open.sel.jetbrains.psi.impl"
+
+  elementTypeHolderClass="fr.assoba.open.sel.jetbrains.SelType"
+  elementTypeClass="fr.assoba.open.sel.jetbrains.SelElementType"
+  tokenTypeClass="fr.assoba.open.sel.jetbrains.SelTokenType"
+
+  tokens= [
+      NSTK='namespace'
+      ETK='entity'
+      TTK='regexp:bool|int|long|float|double|bytes|string'
+      LTK='list'
+      MTK='map'
+      ID='regexp:[a-zA-Z]([a-zA-Z0-9_]*)'
+      FQID='regexp:[a-zA-Z]([a-zA-Z0-9_]*)(\.[a-zA-Z]([a-zA-Z0-9_]*))*'
+      LC= '{'
+      RC= '}'
+      LP= '('
+      RP= ')'
+      LB= '['
+      RB= ']'
+      COLON= ':'
+      ANTK='regexp:@[a-zA-Z]([a-zA-Z0-9_]*)(\([^\)]*\))?'
+  ]
+}
+
+root ::= namespace*
+fqidentifier ::= FQID
+namespace ::= ns_statement
+private ns_statement ::= annotation* NSTK ID LC entity* RC { pin =LC recoverWhile="ns_statement_recover" }
+private ns_statement_recover ::=!(RC)
+entity ::= entity_stmt
+private entity_stmt ::= annotation* ETK  ID LC prop* RC { pin=LC recoverWhile="entity_stmt_recover" }
+private entity_stmt ::= !(RC)
+prop ::= annotation*  ID COLON type
+private type ::= typeId | ID |fqidentifier !reserved
+typeId ::=  TTK | collection
+private reserved ::= ETK|NSTK|TTK|LTK|MTK
+private collection ::= list | map
+annotation ::= ANTK
+list ::=LTK LB type RB
+map ::=MTK LB type RB

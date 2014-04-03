@@ -1,0 +1,39 @@
+<idea-plugin version="2">
+  <id>fr.assoba.open.sel.plugin</id>
+  <name>SEL Editor</name>
+  <version>1.0</version>
+  <vendor email="jpujo@assoba.fr" url="http://www.assoba.fr/open">Assoba Open</vendor>
+
+  <description><![CDATA[
+      An IDEA plugin for the SEL language<br>
+
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Initial Version<br>
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="120"/>
+
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
+    <fileTypeFactory implementation="fr.assoba.open.sel.jetbrains.SelFileTypeFactory"/>
+    <lang.parserDefinition language="sel" implementationClass="fr.assoba.open.sel.jetbrains.SelParserDefinition"/>
+    <lang.formatter language="sel" implementationClass="fr.assoba.open.sel.jetbrains.SelFormattingBuilder"/>
+    <lang.syntaxHighlighterFactory key="sel"
+                                   implementationClass="fr.assoba.open.sel.jetbrains.SelSyntaxHighlighterFactory"/>
+  </extensions>
+
+  <application-components>
+  </application-components>
+
+  <project-components>
+  </project-components>
+
+  <actions>
+  </actions>
+
+</idea-plugin>
