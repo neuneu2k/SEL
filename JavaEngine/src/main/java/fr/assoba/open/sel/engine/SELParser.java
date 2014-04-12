@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014 Josselin Pujo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package fr.assoba.open.sel.engine;
 
 import org.parboiled.Action;
@@ -11,14 +27,6 @@ import org.parboiled.annotations.SuppressSubnodes;
 @BuildParseTree
 public class SELParser<SELNode> extends BaseParser<SELNode> {
 
-  public Rule Root() {
-    return ZeroOrMore(Sequence(Space(), Namespace(), Space()));
-  }
-
-  public Rule Namespace() {
-    return Sequence(PushNamespace, Annotations(), Space(), "namespace", Space(), Name(), Space(), '{', Space(), ZeroOrMore(Entity()), '}');
-  }
-
   public Action<SELNode> PushNamespace = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -26,11 +34,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
-  public Rule Entity() {
-    return Sequence(PushEntity, Annotations(), "entity", Space(), Name(), Space(), '{', Space(), ZeroOrMore(Property()), Space(), '}', Space(), PopEntity);
-  }
-
   public Action<SELNode> PushEntity = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -39,7 +42,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
   public Action<SELNode> PopEntity = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -50,12 +52,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
-
-  public Rule Property() {
-    return Sequence(PushProperty, Annotations(), Space(), Name(), Space(), ':', Space(), TypeDecl(), Space(), PopProperty);
-  }
-
   public Action<SELNode> PushProperty = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -64,7 +60,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
   public Action<SELNode> PopProperty = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -75,13 +70,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
-
-  @SuppressNode
-  public Rule TypeDecl() {
-    return Sequence(PushTypeDecl, FirstOf(Type(), Collection(), FQID()), PopTypeDecl);
-  }
-
   public Action<SELNode> PushTypeDecl = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -90,7 +78,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
-
   public Action<SELNode> PopTypeDecl = new Action<SELNode>() {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
@@ -101,6 +88,54 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
       return true;
     }
   };
+  public Action<SELNode> PushAnnotation = new Action<SELNode>() {
+    @Override
+    public boolean run(Context<SELNode> selNodeContext) {
+      Annotation a = new Annotation();
+      push((SELNode) a);
+      return true;
+    }
+  };
+  public Action<SELNode> PopAnnotation = new Action<SELNode>() {
+    @Override
+    public boolean run(Context<SELNode> selNodeContext) {
+      Annotation a = (Annotation) pop();
+      Annotated p = (Annotated) pop();
+      push((SELNode) p);
+      p.getAnnotations().addAnnotation(a);
+      return true;
+    }
+  };
+  public Action<SELNode> SetName = new Action<SELNode>() {
+    @Override
+    public boolean run(Context<SELNode> selNodeContext) {
+      Annotated o = (Annotated) pop();
+      push((SELNode) o);
+      o.setName(selNodeContext.getMatch());
+      return true;
+    }
+  };
+
+  public Rule Root() {
+    return ZeroOrMore(Sequence(Space(), Namespace(), Space()));
+  }
+
+  public Rule Namespace() {
+    return Sequence(PushNamespace, Annotations(), Space(), "namespace", Space(), Name(), Space(), '{', Space(), ZeroOrMore(Entity()), '}');
+  }
+
+  public Rule Entity() {
+    return Sequence(PushEntity, Annotations(), "entity", Space(), Name(), Space(), '{', Space(), ZeroOrMore(Property()), Space(), '}', Space(), PopEntity);
+  }
+
+  public Rule Property() {
+    return Sequence(PushProperty, Annotations(), Space(), Name(), Space(), ':', Space(), TypeDecl(), Space(), PopProperty);
+  }
+
+  @SuppressNode
+  public Rule TypeDecl() {
+    return Sequence(PushTypeDecl, FirstOf(Type(), Collection(), FQID()), PopTypeDecl);
+  }
 
   public Rule Type() {
     return Sequence(FirstOf("bool", "int", "long", "float", "double", "bytes", "string").label("Type"), new Action<SELNode>() {
@@ -149,26 +184,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
     return Sequence(PushAnnotation, AT(), AnnotationId(), Optional(AnnotationContent().label("content")), PopAnnotation);
   }
 
-  public Action<SELNode> PushAnnotation = new Action<SELNode>() {
-    @Override
-    public boolean run(Context<SELNode> selNodeContext) {
-      Annotation a = new Annotation();
-      push((SELNode) a);
-      return true;
-    }
-  };
-
-  public Action<SELNode> PopAnnotation = new Action<SELNode>() {
-    @Override
-    public boolean run(Context<SELNode> selNodeContext) {
-      Annotation a = (Annotation) pop();
-      Annotated p = (Annotated) pop();
-      push((SELNode) p);
-      p.getAnnotations().addAnnotation(a);
-      return true;
-    }
-  };
-
   public Rule AnnotationId() {
     return Sequence(Identifier().label("id"), new Action<SELNode>() {
       @Override
@@ -210,17 +225,6 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
   public Rule Name() {
     return Sequence(Identifier(), SetName);
   }
-
-  public Action<SELNode> SetName = new Action<SELNode>() {
-    @Override
-    public boolean run(Context<SELNode> selNodeContext) {
-      Annotated o = (Annotated) pop();
-      push((SELNode) o);
-      o.setName(selNodeContext.getMatch());
-      return true;
-    }
-  };
-
 
   public Rule Identifier() {
     return Sequence(Letter(), ZeroOrMore(LetterOrDigit()));

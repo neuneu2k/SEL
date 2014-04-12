@@ -1,18 +1,18 @@
 @t(youpla boum
 bang bang
 yoo !
-) namespace toto  {
+) namespace toto {
 
-@t entity  A  {
-  @t id : int
-  truc : bytes
-  bee:B
-  bees:list[B]
-  namedBees:map[B]
-}
+  @t entity A {
+    @t id : int
+    truc : bytes
+    bee:B
+    bees:list[B]
+    namedBees:map[B]
+  }
 
-entity B {
-  @t name :string
-  outOfScopeZ:toto.Z
-}
+  entity B {
+    @t name :string
+    outOfScopeZ:toto.Z
+  }
 }

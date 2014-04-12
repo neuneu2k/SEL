@@ -1,59 +1,41 @@
+/*
+ * Copyright 2014 Josselin Pujo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package fr.assoba.open.sel.jetbrains;
 
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import com.intellij.openapi.diagnostic.Logger;
-import static fr.assoba.open.sel.jetbrains.SelType.*;
-import static fr.assoba.open.sel.jetbrains.SelParserUtil.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.psi.tree.IElementType;
+
+import static fr.assoba.open.sel.jetbrains.SelParserUtil.*;
+import static fr.assoba.open.sel.jetbrains.SelType.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class SimpleParser implements PsiParser {
 
   public static final Logger LOG_ = Logger.getInstance("fr.assoba.open.sel.jetbrains.SimpleParser");
-
-  public ASTNode parse(IElementType root_, PsiBuilder builder_) {
-    boolean result_;
-    builder_ = adapt_builder_(root_, builder_, this, null);
-    Marker marker_ = enter_section_(builder_, 0, _COLLAPSE_, null);
-    if (root_ == ANNOTATION) {
-      result_ = annotation(builder_, 0);
+  final static Parser ns_statement_recover_parser_ = new Parser() {
+    public boolean parse(PsiBuilder builder_, int level_) {
+      return ns_statement_recover(builder_, level_ + 1);
     }
-    else if (root_ == ENTITY) {
-      result_ = entity(builder_, 0);
-    }
-    else if (root_ == FQIDENTIFIER) {
-      result_ = fqidentifier(builder_, 0);
-    }
-    else if (root_ == LIST) {
-      result_ = list(builder_, 0);
-    }
-    else if (root_ == MAP) {
-      result_ = map(builder_, 0);
-    }
-    else if (root_ == NAMESPACE) {
-      result_ = namespace(builder_, 0);
-    }
-    else if (root_ == PROP) {
-      result_ = prop(builder_, 0);
-    }
-    else if (root_ == TYPE_ID) {
-      result_ = typeId(builder_, 0);
-    }
-    else {
-      result_ = parse_root_(root_, builder_, 0);
-    }
-    exit_section_(builder_, 0, marker_, root_, result_, true, TRUE_CONDITION);
-    return builder_.getTreeBuilt();
-  }
-
-  protected boolean parse_root_(final IElementType root_, final PsiBuilder builder_, final int level_) {
-    return root(builder_, level_ + 1);
-  }
+  };
 
   /* ********************************************************** */
   // ANTK
@@ -335,9 +317,34 @@ public class SimpleParser implements PsiParser {
     return result_;
   }
 
-  final static Parser ns_statement_recover_parser_ = new Parser() {
-    public boolean parse(PsiBuilder builder_, int level_) {
-      return ns_statement_recover(builder_, level_ + 1);
+  public ASTNode parse(IElementType root_, PsiBuilder builder_) {
+    boolean result_;
+    builder_ = adapt_builder_(root_, builder_, this, null);
+    Marker marker_ = enter_section_(builder_, 0, _COLLAPSE_, null);
+    if (root_ == ANNOTATION) {
+      result_ = annotation(builder_, 0);
+    } else if (root_ == ENTITY) {
+      result_ = entity(builder_, 0);
+    } else if (root_ == FQIDENTIFIER) {
+      result_ = fqidentifier(builder_, 0);
+    } else if (root_ == LIST) {
+      result_ = list(builder_, 0);
+    } else if (root_ == MAP) {
+      result_ = map(builder_, 0);
+    } else if (root_ == NAMESPACE) {
+      result_ = namespace(builder_, 0);
+    } else if (root_ == PROP) {
+      result_ = prop(builder_, 0);
+    } else if (root_ == TYPE_ID) {
+      result_ = typeId(builder_, 0);
+    } else {
+      result_ = parse_root_(root_, builder_, 0);
     }
-  };
+    exit_section_(builder_, 0, marker_, root_, result_, true, TRUE_CONDITION);
+    return builder_.getTreeBuilt();
+  }
+
+  protected boolean parse_root_(final IElementType root_, final PsiBuilder builder_, final int level_) {
+    return root(builder_, level_ + 1);
+  }
 }

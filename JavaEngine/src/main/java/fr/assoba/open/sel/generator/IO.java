@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-package fr.assoba.open.sel.jetbrains;
+package fr.assoba.open.sel.generator;
 
-import com.intellij.lang.Language;
-
-public class SelLanguage extends Language {
-
-  public static final SelLanguage INSTANCE = new SelLanguage();
-
-  protected SelLanguage() {
-    super("sel");
-  }
+public class IO {
 }
