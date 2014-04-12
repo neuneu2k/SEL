@@ -23,6 +23,9 @@ The Simple Entity Language is an abstract data structure definition language.
 
     TODO
 
+## Downloads
+
+
 #FIQ (Frequent Imaginary Questions, and angry answers)
 
 > Why the hell have another entity schema language when you have protocol buffers, Json schema, xsd, ASN-1, annotated yaml, avro, etc ...
@@ -37,11 +40,14 @@ All existing entity schema languages are highly linked to a serialization implem
 - People who love UML are mostly people who would never touch anything that can ever go in production if their life depended on it.
 	
 > The tooling is in java, I really want to develop on my iPad !
+
 I'm really sorry you don’t have a real open computer;
 A fully functional, but not as user friendly, JavaScript version is in the works.
 
 > The tooling is in java, I hate java, do it in Haskell/Ruby/Perl/C#/Scheme !
-Fuck you too, the EBNF is here, have fun.
+
+Fuck you too, the [EBNF](https://github.com/neuneu2k/SEL/blob/master/JetbrainsPlugin/src/fr/assoba/open/sel/jetbrains/sel.bnf) is here, have fun.
+
 > What the heck is that custom JavaScript templating language, we have better ways to generate code !
 
 Yes, I know about stringtemplate, fully typed scala templates, Razor, etc... JavaScript is universally known, hard to master but trivial to use for simple templating, and anyways if the browser based version for (platform slaves)/(whining java haters) is to work, JavaScript is the name of the game.
