@@ -16,12 +16,11 @@
 
 package fr.assoba.open.sel.generator;
 
+import fr.assoba.open.sel.engine.Namespace;
+
 import java.io.IOException;
+import java.util.List;
 
-public interface IO {
-  void writeFile(String file, String content) throws IOException;
-
-  void log(String logline);
-
-  String readFile(String file) throws IOException;
+public interface JavaGenerator {
+  public void generate(List<Namespace> namespaces, IO io) throws IOException;
 }

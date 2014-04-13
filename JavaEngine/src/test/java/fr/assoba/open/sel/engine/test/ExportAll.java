@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package fr.assoba.open.sel.generator;
+package fr.assoba.open.sel.engine.test;
 
+import fr.assoba.open.sel.engine.Namespace;
+import fr.assoba.open.sel.generator.IO;
+import fr.assoba.open.sel.generator.LanguageExecutor;
+import fr.assoba.open.sel.generator.SimpleIO;
+
+import javax.script.ScriptException;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-public interface IO {
-  void writeFile(String file, String content) throws IOException;
-
-  void log(String logline);
-
-  String readFile(String file) throws IOException;
+public class ExportAll {
+  public static void main(String[] args) throws IOException, ScriptException {
+    IO io = new SimpleIO(new File("out/"));
+    List<Namespace> namespaces = ParseTree.ParseTest();
+    LanguageExecutor.execute(namespaces, io, "json", "xml");
+  }
 }

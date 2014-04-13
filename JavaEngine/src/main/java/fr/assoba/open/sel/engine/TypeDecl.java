@@ -16,6 +16,7 @@
 
 package fr.assoba.open.sel.engine;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class TypeDecl implements SELNode {
   private Scalar scalar;
   private String typeRef;
   private DeclType type;
+
   public TypeDecl() {
   }
 
@@ -53,6 +55,7 @@ public class TypeDecl implements SELNode {
     this.typeRef = typeRef;
   }
 
+  @XmlAttribute(name = "refType")
   public DeclType getType() {
     return type;
   }
@@ -60,11 +63,13 @@ public class TypeDecl implements SELNode {
   public static enum Scalar {
     BOOL("bool"), INT("int"), LONG("long"), FLOAT("float"), DOUBLE("double"), BYTES("bytes"), STRING("string");
     private static Map<String, Scalar> names = new HashMap<>();
+
     static {
       for (Scalar scalar : Scalar.values()) {
         names.put(scalar.getName(), scalar);
       }
     }
+
     private String name;
 
     Scalar(String name) {

@@ -16,13 +16,16 @@
 
 package fr.assoba.open.sel.engine;
 
-import org.parboiled.Action;
-import org.parboiled.BaseParser;
-import org.parboiled.Context;
-import org.parboiled.Rule;
+import org.parboiled.*;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.SuppressNode;
 import org.parboiled.annotations.SuppressSubnodes;
+import org.parboiled.parserunners.RecoveringParseRunner;
+import org.parboiled.support.ParsingResult;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @BuildParseTree
 public class SELParser<SELNode> extends BaseParser<SELNode> {
@@ -253,5 +256,23 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
   @SuppressNode
   public Rule RP() {
     return Ch(')');
+  }
+
+  public static List<Namespace> parse(String toParse) throws IOException {
+    SELParser parser = Parboiled.createParser(SELParser.class);
+    RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode> runner = new RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode>(parser.Root());
+    ParsingResult<fr.assoba.open.sel.engine.SELNode> parsed = runner.run(toParse);
+    if (parsed.hasErrors()) {
+      for (Object parseError : parsed.parseErrors) {
+        System.err.println(parseError.toString());
+        throw new IOException("Error parsing");
+      }
+    }
+    ArrayList<Namespace> result = new ArrayList<>();
+    for (fr.assoba.open.sel.engine.SELNode node : parsed.valueStack) {
+      Namespace ns = (Namespace) node;
+      result.add(ns);
+    }
+    return result;
   }
 }

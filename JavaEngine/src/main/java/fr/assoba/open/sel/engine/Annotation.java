@@ -16,9 +16,12 @@
 
 package fr.assoba.open.sel.engine;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
+
 public class Annotation implements SELNode {
   private String name;
-  private String value;
+  private String value = "";
 
   public Annotation() {
   }
@@ -28,6 +31,7 @@ public class Annotation implements SELNode {
     this.value = value;
   }
 
+  @XmlAttribute(name = "name")
   public String getName() {
     return name;
   }
@@ -36,6 +40,7 @@ public class Annotation implements SELNode {
     this.name = name;
   }
 
+  @XmlValue
   public String getValue() {
     return value;
   }

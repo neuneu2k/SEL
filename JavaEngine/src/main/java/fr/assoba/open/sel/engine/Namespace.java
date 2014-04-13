@@ -16,18 +16,22 @@
 
 package fr.assoba.open.sel.engine;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlRootElement(name = "namespace")
 public class Namespace extends Annotated {
   private List<Entity> entityList = new ArrayList<>();
 
+  @XmlElement(name = "entity")
   public List<Entity> getEntityList() {
     return entityList;
   }
 
-  public void setEntityList(List<Entity> entityList) {
-    this.entityList = entityList;
+  public Entity[] entities() {
+    return entityList.toArray(new Entity[]{});
   }
 
   @Override

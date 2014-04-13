@@ -16,12 +16,21 @@
 
 package fr.assoba.open.sel.generator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import fr.assoba.open.sel.engine.Namespace;
+
 import java.io.IOException;
+import java.util.List;
 
-public interface IO {
-  void writeFile(String file, String content) throws IOException;
-
-  void log(String logline);
-
-  String readFile(String file) throws IOException;
+public class JSONGenerator implements JavaGenerator {
+  @Override
+  public void generate(List<Namespace> namespaces, IO io) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    for (Namespace namespace : namespaces) {
+      String output = mapper.writeValueAsString(namespace);
+      io.writeFile(namespace.getName() + ".json", output);
+    }
+  }
 }

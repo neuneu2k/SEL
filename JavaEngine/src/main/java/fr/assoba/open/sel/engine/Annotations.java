@@ -16,15 +16,19 @@
 
 package fr.assoba.open.sel.engine;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Annotations implements SELNode {
   private List<Annotation> annotations = new ArrayList<>();
 
-  public Iterator<Annotation> getAnnotations() {
-    return annotations.iterator();
+  @JsonGetter
+  @XmlElement(name = "annotation")
+  public Annotation[] getAnnotations() {
+    return annotations.toArray(new Annotation[]{});
   }
 
   public void addAnnotation(Annotation annotation) {

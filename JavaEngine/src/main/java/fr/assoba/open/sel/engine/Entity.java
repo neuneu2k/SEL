@@ -16,18 +16,20 @@
 
 package fr.assoba.open.sel.engine;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Entity extends Annotated {
   private List<Property> propertyList = new ArrayList<>();
 
+  @XmlElement(name = "property")
   public List<Property> getPropertyList() {
     return propertyList;
   }
 
-  public void setPropertyList(List<Property> propertyList) {
-    this.propertyList = propertyList;
+  public Property[] properties() {
+    return propertyList.toArray(new Property[]{});
   }
 
   @Override
