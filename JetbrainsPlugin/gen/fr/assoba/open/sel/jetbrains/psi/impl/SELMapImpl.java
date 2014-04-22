@@ -19,7 +19,6 @@ package fr.assoba.open.sel.jetbrains.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import fr.assoba.open.sel.jetbrains.psi.SELFqidentifier;
 import fr.assoba.open.sel.jetbrains.psi.SELMap;
@@ -27,8 +26,6 @@ import fr.assoba.open.sel.jetbrains.psi.SELTypeId;
 import fr.assoba.open.sel.jetbrains.psi.SELVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static fr.assoba.open.sel.jetbrains.SelType.ID;
 
 public class SELMapImpl extends ASTWrapperPsiElement implements SELMap {
 
@@ -51,12 +48,6 @@ public class SELMapImpl extends ASTWrapperPsiElement implements SELMap {
   @Nullable
   public SELTypeId getTypeId() {
     return findChildByClass(SELTypeId.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
   }
 
 }

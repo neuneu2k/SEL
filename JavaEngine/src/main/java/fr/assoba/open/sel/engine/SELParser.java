@@ -85,9 +85,15 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
     @Override
     public boolean run(Context<SELNode> selNodeContext) {
       TypeDecl t = (TypeDecl) pop();
-      Property p = (Property) pop();
-      push((SELNode) p);
-      p.setType(t);
+      SELNode node = pop();
+      push(node);
+      if (node instanceof Property) {
+        Property p = (Property) node;
+        p.setType(t);
+      } else if (node instanceof TypeDecl) {
+        TypeDecl d = (TypeDecl) node;
+        d.setCollectionRefType(t);
+      }
       return true;
     }
   };
@@ -119,12 +125,30 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
     }
   };
 
+  public static List<Namespace> parse(String toParse) throws IOException {
+    SELParser parser = Parboiled.createParser(SELParser.class);
+    RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode> runner = new RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode>(parser.Root());
+    ParsingResult<fr.assoba.open.sel.engine.SELNode> parsed = runner.run(toParse);
+    if (parsed.hasErrors()) {
+      for (Object parseError : parsed.parseErrors) {
+        System.err.println(parseError.toString());
+        throw new IOException("Error parsing");
+      }
+    }
+    ArrayList<Namespace> result = new ArrayList<>();
+    for (fr.assoba.open.sel.engine.SELNode node : parsed.valueStack) {
+      Namespace ns = (Namespace) node;
+      result.add(ns);
+    }
+    return result;
+  }
+
   public Rule Root() {
     return ZeroOrMore(Sequence(Space(), Namespace(), Space()));
   }
 
   public Rule Namespace() {
-    return Sequence(PushNamespace, Annotations(), Space(), "namespace", Space(), Name(), Space(), '{', Space(), ZeroOrMore(Entity()), '}');
+    return Sequence(PushNamespace, Annotations(), Space(), "namespace", Space(), NamespaceID(), Space(), '{', Space(), ZeroOrMore(Entity()), '}');
   }
 
   public Rule Entity() {
@@ -137,7 +161,7 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
 
   @SuppressNode
   public Rule TypeDecl() {
-    return Sequence(PushTypeDecl, FirstOf(Type(), Collection(), FQID()), PopTypeDecl);
+    return Sequence(PushTypeDecl, FirstOf(Type(), Collection(), PropID()), PopTypeDecl);
   }
 
   public Rule Type() {
@@ -154,7 +178,7 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
   }
 
   public Rule Collection() {
-    return FirstOf(Sequence("list[", FQID().label("list"), new Action<SELNode>() {
+    return FirstOf(Sequence("list[", TypeDecl(), new Action<SELNode>() {
       @Override
       public boolean run(Context<SELNode> selNodeContext) {
         TypeDecl t = (TypeDecl) pop();
@@ -162,7 +186,7 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
         t.setTypeRefType(TypeDecl.DeclType.LIST);
         return true;
       }
-    }, ']'), Sequence("map[", FQID().label("map"), new Action<SELNode>() {
+    }, ']'), Sequence("map[", TypeDecl(), new Action<SELNode>() {
       @Override
       public boolean run(Context<SELNode> selNodeContext) {
         TypeDecl t = (TypeDecl) pop();
@@ -211,9 +235,8 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
     }, RP());
   }
 
-  @SuppressSubnodes
-  public Rule FQID() {
-    return Sequence(Sequence(Identifier(), ZeroOrMore(Sequence('.', Identifier()))), new Action<SELNode>() {
+  public Rule PropID() {
+    return Sequence(FQID(), new Action<SELNode>() {
       @Override
       public boolean run(Context<SELNode> selNodeContext) {
         TypeDecl t = (TypeDecl) pop();
@@ -222,6 +245,15 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
         return true;
       }
     });
+  }
+
+  public Rule NamespaceID() {
+    return Sequence(FQID(), SetName);
+  }
+
+  @SuppressSubnodes
+  public Rule FQID() {
+    return Sequence(Identifier(), ZeroOrMore(Sequence('.', Identifier())));
   }
 
   @SuppressSubnodes
@@ -256,23 +288,5 @@ public class SELParser<SELNode> extends BaseParser<SELNode> {
   @SuppressNode
   public Rule RP() {
     return Ch(')');
-  }
-
-  public static List<Namespace> parse(String toParse) throws IOException {
-    SELParser parser = Parboiled.createParser(SELParser.class);
-    RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode> runner = new RecoveringParseRunner<fr.assoba.open.sel.engine.SELNode>(parser.Root());
-    ParsingResult<fr.assoba.open.sel.engine.SELNode> parsed = runner.run(toParse);
-    if (parsed.hasErrors()) {
-      for (Object parseError : parsed.parseErrors) {
-        System.err.println(parseError.toString());
-        throw new IOException("Error parsing");
-      }
-    }
-    ArrayList<Namespace> result = new ArrayList<>();
-    for (fr.assoba.open.sel.engine.SELNode node : parsed.valueStack) {
-      Namespace ns = (Namespace) node;
-      result.add(ns);
-    }
-    return result;
   }
 }

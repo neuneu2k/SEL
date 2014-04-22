@@ -28,7 +28,4 @@ public interface SELList extends PsiElement {
   @Nullable
   SELTypeId getTypeId();
 
-  @Nullable
-  PsiElement getId();
-
 }

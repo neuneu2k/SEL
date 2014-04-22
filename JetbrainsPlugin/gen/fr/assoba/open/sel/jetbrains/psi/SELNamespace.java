@@ -31,6 +31,6 @@ public interface SELNamespace extends PsiElement {
   List<SELEntity> getEntityList();
 
   @NotNull
-  PsiElement getId();
+  SELFqidentifier getFqidentifier();
 
 }

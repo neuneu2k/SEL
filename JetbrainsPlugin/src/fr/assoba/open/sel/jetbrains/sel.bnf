@@ -33,15 +33,15 @@
 }
 
 root ::= namespace*
-fqidentifier ::= FQID
+fqidentifier ::= (FQID|ID)
 namespace ::= ns_statement
-private ns_statement ::= annotation* NSTK ID LC entity* RC { pin =LC recoverWhile="ns_statement_recover" }
+private ns_statement ::= annotation* NSTK fqidentifier LC entity* RC { pin =LC recoverWhile="ns_statement_recover" }
 private ns_statement_recover ::=!(RC)
 entity ::= entity_stmt
 private entity_stmt ::= annotation* ETK  ID LC prop* RC { pin=LC recoverWhile="entity_stmt_recover" }
 private entity_stmt ::= !(RC)
 prop ::= annotation*  ID COLON type
-private type ::= typeId | ID |fqidentifier !reserved
+private type ::= typeId | fqidentifier !reserved
 typeId ::=  TTK | collection
 private reserved ::= ETK|NSTK|TTK|LTK|MTK
 private collection ::= list | map

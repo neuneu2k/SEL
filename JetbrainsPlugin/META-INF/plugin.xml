@@ -17,16 +17,15 @@
 <idea-plugin version="2">
   <id>fr.assoba.open.sel.plugin</id>
   <name>SEL Editor</name>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <vendor email="jpujo@assoba.fr" url="http://www.assoba.fr/open">Assoba Open</vendor>
 
   <description><![CDATA[
       An IDEA plugin for the SEL language<br>
-
     ]]></description>
 
   <change-notes><![CDATA[
-      Initial Version<br>
+      BugFix for FQID Namespace handeling
     ]]>
   </change-notes>
 

@@ -34,4 +34,7 @@ public interface SELProp extends PsiElement {
   @Nullable
   SELTypeId getTypeId();
 
+  @NotNull
+  PsiElement getId();
+
 }

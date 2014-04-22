@@ -24,8 +24,10 @@ import com.intellij.psi.PsiElementVisitor;
 import fr.assoba.open.sel.jetbrains.psi.SELFqidentifier;
 import fr.assoba.open.sel.jetbrains.psi.SELVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static fr.assoba.open.sel.jetbrains.SelType.FQID;
+import static fr.assoba.open.sel.jetbrains.SelType.ID;
 
 public class SELFqidentifierImpl extends ASTWrapperPsiElement implements SELFqidentifier {
 
@@ -39,9 +41,15 @@ public class SELFqidentifierImpl extends ASTWrapperPsiElement implements SELFqid
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getFqid() {
-    return findNotNullChildByType(FQID);
+    return findChildByType(FQID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getId() {
+    return findChildByType(ID);
   }
 
 }

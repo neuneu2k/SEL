@@ -19,18 +19,12 @@ package fr.assoba.open.sel.jetbrains.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import fr.assoba.open.sel.jetbrains.psi.SELAnnotation;
-import fr.assoba.open.sel.jetbrains.psi.SELEntity;
-import fr.assoba.open.sel.jetbrains.psi.SELNamespace;
-import fr.assoba.open.sel.jetbrains.psi.SELVisitor;
+import fr.assoba.open.sel.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static fr.assoba.open.sel.jetbrains.SelType.ID;
 
 public class SELNamespaceImpl extends ASTWrapperPsiElement implements SELNamespace {
 
@@ -57,8 +51,8 @@ public class SELNamespaceImpl extends ASTWrapperPsiElement implements SELNamespa
 
   @Override
   @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
+  public SELFqidentifier getFqidentifier() {
+    return findNotNullChildByClass(SELFqidentifier.class);
   }
 
 }

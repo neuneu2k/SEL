@@ -17,24 +17,26 @@
 package fr.assoba.open.sel.engine;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TypeDecl implements SELNode {
   private Scalar scalar;
   private String typeRef;
-  private DeclType type;
+  private TypeDecl collectionRefType;
+  private DeclType refType;
 
   public TypeDecl() {
   }
 
   public void setTypeRef(DeclType d, String typeRef) {
-    this.type = d;
+    this.refType = d;
     this.typeRef = typeRef;
   }
 
   public void setTypeRefType(DeclType d) {
-    this.type = d;
+    this.refType = d;
   }
 
   public Scalar getScalar() {
@@ -42,7 +44,7 @@ public class TypeDecl implements SELNode {
   }
 
   public void setScalar(Scalar s) {
-    this.type = DeclType.SCALAR;
+    this.refType = DeclType.SCALAR;
     this.scalar = s;
   }
 
@@ -51,13 +53,22 @@ public class TypeDecl implements SELNode {
   }
 
   public void setTypeRef(String typeRef) {
-    this.type = DeclType.REF;
+    this.refType = DeclType.REF;
     this.typeRef = typeRef;
   }
 
   @XmlAttribute(name = "refType")
-  public DeclType getType() {
-    return type;
+  public DeclType getRefType() {
+    return refType;
+  }
+
+  @XmlElement(name = "type")
+  public TypeDecl getCollectionRefType() {
+    return collectionRefType;
+  }
+
+  public void setCollectionRefType(TypeDecl collectionRefType) {
+    this.collectionRefType = collectionRefType;
   }
 
   public static enum Scalar {
@@ -88,12 +99,6 @@ public class TypeDecl implements SELNode {
       return name;
     }
 
-    @Override
-    public String toString() {
-      return "Scalar{" +
-          "name='" + name + '\'' +
-          '}';
-    }
   }
 
   public static enum DeclType {

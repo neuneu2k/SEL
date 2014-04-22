@@ -28,7 +28,4 @@ public interface SELMap extends PsiElement {
   @Nullable
   SELTypeId getTypeId();
 
-  @Nullable
-  PsiElement getId();
-
 }

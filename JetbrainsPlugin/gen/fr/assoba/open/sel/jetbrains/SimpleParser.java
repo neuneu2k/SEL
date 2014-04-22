@@ -115,14 +115,15 @@ public class SimpleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FQID
+  // FQID|ID
   public static boolean fqidentifier(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "fqidentifier")) return false;
-    if (!nextTokenIs(builder_, FQID)) return false;
+    if (!nextTokenIs(builder_, "<fqidentifier>", FQID, ID)) return false;
     boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<fqidentifier>");
     result_ = consumeToken(builder_, FQID);
-    exit_section_(builder_, marker_, FQIDENTIFIER, result_);
+    if (!result_) result_ = consumeToken(builder_, ID);
+    exit_section_(builder_, level_, marker_, FQIDENTIFIER, result_, false, null);
     return result_;
   }
 
@@ -167,14 +168,16 @@ public class SimpleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // annotation* NSTK ID LC entity* RC
+  // annotation* NSTK fqidentifier LC entity* RC
   static boolean ns_statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ns_statement")) return false;
     boolean result_ = false;
     boolean pinned_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
     result_ = ns_statement_0(builder_, level_ + 1);
-    result_ = result_ && consumeTokens(builder_, 3, NSTK, ID, LC);
+    result_ = result_ && consumeToken(builder_, NSTK);
+    result_ = result_ && fqidentifier(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, LC);
     pinned_ = result_; // pin = LC
     result_ = result_ && report_error_(builder_, ns_statement_4(builder_, level_ + 1));
     result_ = pinned_ && consumeToken(builder_, RC) && result_;
@@ -272,32 +275,31 @@ public class SimpleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // typeId | ID |fqidentifier !reserved
+  // typeId | fqidentifier !reserved
   static boolean type(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "type")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = typeId(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, ID);
-    if (!result_) result_ = type_2(builder_, level_ + 1);
+    if (!result_) result_ = type_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // fqidentifier !reserved
-  private static boolean type_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "type_2")) return false;
+  private static boolean type_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "type_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = fqidentifier(builder_, level_ + 1);
-    result_ = result_ && type_2_1(builder_, level_ + 1);
+    result_ = result_ && type_1_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
   // !reserved
-  private static boolean type_2_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "type_2_1")) return false;
+  private static boolean type_1_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "type_1_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NOT_, null);
     result_ = !reserved(builder_, level_ + 1);

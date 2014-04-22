@@ -19,6 +19,7 @@ package fr.assoba.open.sel.jetbrains.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import fr.assoba.open.sel.jetbrains.psi.*;
@@ -26,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static fr.assoba.open.sel.jetbrains.SelType.ID;
 
 public class SELPropImpl extends ASTWrapperPsiElement implements SELProp {
 
@@ -54,6 +57,12 @@ public class SELPropImpl extends ASTWrapperPsiElement implements SELProp {
   @Nullable
   public SELTypeId getTypeId() {
     return findChildByClass(SELTypeId.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

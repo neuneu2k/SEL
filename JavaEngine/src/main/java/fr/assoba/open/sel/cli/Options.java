@@ -22,6 +22,13 @@ import java.io.File;
 
 
 public class Options {
+  @Option(name = "-out", usage = "Select the directory where output files will be generated", required = true)
+  private File outputDir = new File(".");
+  @Option(name = "-include", usage = "Select the directories where input .sel files and templates can be found", required = false)
+  private File[] sources = new File[]{new File(".")};
+  @Option(name = "-lang", usage = "Select the output languages", required = false)
+  private String[] outputLanguages = {"json", "xml"};
+
   public File getOutputDir() {
     return outputDir;
   }
@@ -45,12 +52,5 @@ public class Options {
   public void setOutputLanguages(String[] outputLanguages) {
     this.outputLanguages = outputLanguages;
   }
-
-  @Option(name = "-out", usage = "Select the directory where output files will be generated", required = true)
-  private File outputDir = new File(".");
-  @Option(name = "-include", usage = "Select the directories where input .sel files and templates can be found", required = false)
-  private File[] sources = new File[]{new File(".")};
-  @Option(name = "-lang", usage = "Select the output languages", required = false)
-  private String[] outputLanguages = {"json", "xml"};
 
 }

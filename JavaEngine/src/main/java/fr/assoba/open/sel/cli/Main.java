@@ -60,7 +60,7 @@ public class Main {
           public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             if (file.getFileName().toString().endsWith(".sel")) {
               String fileName = path.relativize(file).toString();
-              System.out.println("Transpiling "+fileName);
+              System.out.println("Transpiling " + fileName);
               ParsingResult<SELNode> parsed = runner.run(io.readFile(fileName));
               if (parsed.hasErrors()) {
                 for (Object parseError : parsed.parseErrors) {

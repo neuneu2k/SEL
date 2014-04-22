@@ -44,6 +44,7 @@ public class LanguageExecutor {
     ScriptEngine jsEngine = factory.getEngineByName("JavaScript");
     jsEngine.put("IO", io);
     jsEngine.eval(io.readFile("underscore.js"));
+    jsEngine.eval(io.readFile("handlebars-v1.3.0.js"));
     ObjectMapper mapper = new ObjectMapper();
     jsEngine.eval("namespaces=" + mapper.writeValueAsString(namespaceList));
     for (String lang : languages) {

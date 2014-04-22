@@ -30,7 +30,7 @@ public class ParseTree {
   }
 
   public static List<Namespace> ParseTest() throws IOException {
-    InputStream is = ParseTree.class.getResourceAsStream("/sample.sel");
+    InputStream is = ParseTree.class.getResourceAsStream("/wordpress_model.sel");
     byte[] buffer = new byte[is.available()];
     is.read(buffer);
     String toParse = new String(buffer);

@@ -18,11 +18,14 @@
 package fr.assoba.open.sel.jetbrains.psi;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface SELFqidentifier extends PsiElement {
 
-  @NotNull
+  @Nullable
   PsiElement getFqid();
+
+  @Nullable
+  PsiElement getId();
 
 }

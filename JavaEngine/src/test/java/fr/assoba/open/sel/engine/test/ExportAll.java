@@ -28,8 +28,8 @@ import java.util.List;
 
 public class ExportAll {
   public static void main(String[] args) throws IOException, ScriptException {
-    IO io = new SimpleIO(new File("out/"));
+    IO io = new SimpleIO(new File(""));
     List<Namespace> namespaces = ParseTree.ParseTest();
-    LanguageExecutor.execute(namespaces, io, "json", "xml");
+    LanguageExecutor.execute(namespaces, io, "json", "xml", "SimpleJava", "SimpleCSharp");
   }
 }

@@ -37,7 +37,7 @@ public class SimpleIO implements IO {
   public SimpleIO(File outputDir, File... templateSources) {
     this.outputDir = outputDir;
     this.templateSources = new ArrayList<>();
-    URL here=SimpleIO.class.getResource("");
+    URL here = SimpleIO.class.getResource("");
     this.templateSources.add(here);
     for (File f : templateSources) {
       try {
@@ -50,7 +50,7 @@ public class SimpleIO implements IO {
 
   @Override
   public void writeFile(String file, String content) throws IOException {
-    File output = new File(outputDir, file).getAbsoluteFile();
+    File output = new File(outputDir.getAbsoluteFile(), file).getAbsoluteFile();
     Files.createParentDirs(output);
     FileOutputStream fos = new FileOutputStream(output);
     fos.write(content.getBytes(UTF_8));

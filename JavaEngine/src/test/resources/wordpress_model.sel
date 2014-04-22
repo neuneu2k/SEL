@@ -1,0 +1,57 @@
+@doc(Entity Model for the Wordpress schema) namespace org.wordpress.model {
+
+  entity User {
+    @id id : long
+    login:string
+    nicename:string
+    url:string
+    registered:common.DateTime
+    status :int
+    displayName:string
+    meta:map[string]
+  }
+
+  entity UserMeta {
+    @id id :long
+    value:string
+  }
+
+  entity Post {
+    @id id :long
+    author:User
+    date:common.DateTime
+    content:string
+    title:string
+    excerpt:string
+    status:string
+    commentStatus:string
+    pingStatus:string
+    name:string
+    toPing:string
+    pinged:string
+    modified:common.DateTime
+    contentFiltered:string
+    parent:Post
+    guid:string
+    menuOrder:int
+    type:string
+    mimeType:string
+    commentCount:int
+    meta:map[string]
+    comments:list[Comment]
+  }
+
+  entity Comment {
+    @id id:long
+    author:string
+    authorUrl:string
+    date:common.DateTime
+    content:string
+    karma:int
+    type:string
+    parent:Comment
+    user:User
+    meta:map[string]
+  }
+
+}
